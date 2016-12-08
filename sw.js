@@ -1,9 +1,8 @@
 this.addEventListener('install', (event) => {
-  event.waitUntil(caches.open('v3').then((cache) => {
-    console.log('hello')
+  event.waitUntil(caches.open('v4').then((cache) => {
     cache.addAll([
-      '/',
-      '/fallback.jpg'
+      '/sw/',
+      '/sw/fallback.jpg'
     ])
   }))
 })
@@ -13,10 +12,8 @@ this.addEventListener('fetch', (event) => {
   const { request } = event
   const requestURL = new URL(request.url)
 
-  console.log(requestURL.hostname)
-
   if (requestURL.hostname === 'lorempixel.com') {
-    event.respondWith(caches.match('/fallback.jpg').then((resp) => resp))
+    event.respondWith(caches.match('/sw/fallback.jpg').then((resp) => resp))
   } else {
     event.respondWith(caches.match(request).then((resp) => resp || fetch(request)))
   }
